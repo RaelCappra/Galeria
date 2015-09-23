@@ -14,6 +14,9 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <h1 class="error">
+            ${mensagem}
+        </h1>
         <h1>${galeria.nome}</h1>
         <hr/>
         <c:forEach items="${imagemList}" var="imagem">
@@ -26,6 +29,8 @@
             <label for="nome">Nome</label> <input type="text" id="nome" name="imagem.nome" required><br>
             <input type="hidden" value="${galeria.id}" name="galeriaId"/>
             <input type="submit"/>
-        </form>
+        </form><br>
+            
+        <a href="${linkTo[UsuarioController].listaGalerias}">Voltar</a>
     </body>
 </html>

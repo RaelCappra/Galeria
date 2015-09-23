@@ -6,3 +6,8 @@
 <link href="<c:url value="/css/default.css"/>" rel="stylesheet" type="text/css" />  
 <script src="<c:url value="/js/jquery-1.11.3.min.js"/>" type="text/javascript" />
 <script src="<c:url value="/js/jquery.validate.min.js"/>" type="text/javascript" ></script> 
+<style type="text/css">
+            .error {
+                color : red;
+            }
+</style>
