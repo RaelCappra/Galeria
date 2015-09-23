@@ -35,7 +35,7 @@ public class Log {
     public void interceptaAntes() throws SQLException {
         if (!usuarioSessao.isLogged()){
           this.result.include("mensagem", "Você precisa se logar para acessar esse serviço  ");
-          this.result.redirectTo(IndexController.class).index();
+          this.result.forwardTo(IndexController.class).index();
         }
         System.out.println("----------------------------------------");
         System.out.println("Aqui intercepta todos os metodos de qualquer controller antes de qualquer coisa...");

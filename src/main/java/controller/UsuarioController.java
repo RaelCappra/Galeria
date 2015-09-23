@@ -24,45 +24,46 @@ public class UsuarioController {
 
     @Inject
     private UsuarioSessao sessao;
-    
+
     @Inject
     private GaleriaDao galeriaDao;
     @Inject
     private ImagemDao imagemDao;
-    
-    
+
     public List<Galeria> listaGalerias() {
-	Usuario usuario = sessao.getUsuario();
-	List<Galeria> galerias = galeriaDao.listByUsuario(usuario);
-	result.include("nome", usuario.getNome());
-	return galerias;
+        Usuario usuario = sessao.getUsuario();
+        List<Galeria> galerias = galeriaDao.listByUsuario(usuario);
+        result.include("nome", usuario.getNome());
+        return galerias;
+
     }
-    
+
     @Path("usuario/viewGaleria/{id}")
-    public List<Imagem> viewGaleria(Long id){
-        if(!sessao.getIdsPermitidosDeGalerias().contains(id)){
+    public List<Imagem> viewGaleria(Long id) {
+        Usuario usuario = sessao.getUsuario();
+        if (!sessao.getIdsPermitidosDeGalerias().contains(id)) {
             result.redirectTo(UsuarioController.class).listaGalerias();
             result.include("mensagem", "Acesso Negado");
             return null;
-        }else{
+        } else {
             Galeria galeria = galeriaDao.getById(id);
             List<Imagem> imagens = imagemDao.listByGaleria(galeria);
             result.include("galeria", galeria);
             return imagens;
         }
     }
-    
-    public void addGaleria(Galeria galeria){
-        
-	galeria.setUsuario(sessao.getUsuario());
-	galeriaDao.save(galeria);
-	result.redirectTo(this).listaGalerias();
+
+    public void addGaleria(Galeria galeria) {
+
+        galeria.setUsuario(sessao.getUsuario());
+        galeriaDao.save(galeria);
+        result.redirectTo(this).listaGalerias();
     }
 
     @Path({"/usuario/logout", "/usuario/logout/"})
-    public void logout(){
-	this.sessao.logout();
-	this.result.redirectTo(IndexController.class).index();
+    public void logout() {
+        this.sessao.logout();
+        this.result.redirectTo(IndexController.class).index();
 
     }
 }
