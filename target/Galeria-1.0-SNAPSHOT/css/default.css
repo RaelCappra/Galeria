@@ -1,0 +1,12 @@
+thead,h1,h2,h3,h4,h5,h6,button span{
+    font-family: Ubuntu;
+}
+
+button.btn-danger span,
+button.btn-success span{
+    color: black;
+}
+
+label.error{
+    color: red;
+}
