@@ -33,12 +33,12 @@ import sessao.UsuarioSessao;
 public class GaleriaController {
     
     //para o realPath
-    private ServletContext servletContext;
-
+    //private ServletContext servletContext;
+/*
     public GaleriaController(ServletContext servletContext) {
 	this.servletContext = servletContext;
     }
-    
+*/    
     @Inject
     private Result result;
 
@@ -58,38 +58,45 @@ public class GaleriaController {
 	"image/gif"
     );
     
-    private static final String UPLOAD_DIR = "upload";
+    private static final String UPLOAD_DIR = "uploads";
     
-    //TODO: ESSA MERDA ZUADA @$%¨#&@#%¨!&#@!
+ 
     public void addImagem( Imagem imagem, long galeriaId, UploadedFile file) throws FileNotFoundException, IOException {
-	if (null != file) {
-	    //String extensao = file.getFileName().substring(file.getFileName().indexOf("."), file.getFileName().length());
-	    String tipo = file.getContentType();
-	    
-	    if(!ACCEPTED_TYPES.contains(tipo)){
-		//TODO: nao aceitar outros tipos
-	    }
-	    String extensao = tipo.split("/")[1];
-	    imagem.setExtensao(extensao);
-	    imagem.setGaleria(galeriaDao.getById(galeriaId));
-	    Long id = imagemDao.saveReturningId(imagem);
-	    
-	    String realPath = servletContext.getContextPath();
-	    
-	    String fullName = realPath + "/" + UPLOAD_DIR + "/" + id + "." + extensao;
-	    
-	    File f = new File(fullName);
+	if(!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)){
+            result.redirectTo(UsuarioController.class).listaGalerias();
+            return;
+        }else{
+        
+            if (null != file) {
+                //String extensao = file.getFileName().substring(file.getFileName().indexOf("."), file.getFileName().length());
+                String tipo = file.getContentType();
 
-	    IOUtils.copyLarge(file.getFile(), new FileOutputStream(f));
+                if(!ACCEPTED_TYPES.contains(tipo)){
+                    result.include("mensagem", "Erro: tipo ilegal de imagem");
+                    result.redirectTo(UsuarioController.class).listaGalerias();
+                }
+                String extensao = tipo.split("/")[1];
+                imagem.setExtensao(extensao);
+                imagem.setGaleria(galeriaDao.getById(galeriaId));
+                Long id = imagemDao.saveReturningId(imagem);
+                //TODO realpath usando servletContext
+                String realPath = "/home/aluno/Galeria/src/main/webapp";
 
-	    // TODO: mensagem
-	    result.include("mensagem", "O arquivo foi adicionado");
+                String fullName = realPath + "/" + UPLOAD_DIR + "/" + id + "." + extensao;
 
-	    this.result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
+                File f = new File(fullName);
 
-	} else {
-	    result.include("mensagem", "Nenhum arquivo foi selecionado...");
-	    this.result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
-	}
+                IOUtils.copyLarge(file.getFile(), new FileOutputStream(f));
+
+                // TODO: mensagem
+                result.include("mensagem", "O arquivo foi adicionado");
+
+                this.result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
+
+            } else {
+                result.include("mensagem", "Nenhum arquivo foi selecionado...");
+                this.result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
+            }
+        }
     }
 }

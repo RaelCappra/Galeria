@@ -56,5 +56,9 @@ public class Imagem {
     public void setNome(String nome) {
 	this.nome = nome;
     }
+    
+    public String getFileName(){
+        return id + "." + extensao;
+    }
 
 }

@@ -1,8 +1,12 @@
 package sessao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import model.Galeria;
 import model.Usuario;
+import persistencia.GaleriaDao;
 
 @SessionScoped
 public class UsuarioSessao implements Serializable {
@@ -27,5 +31,20 @@ public class UsuarioSessao implements Serializable {
 
     public void logout() {
         user = null;
+    }
+    
+    public List<Long> getIdsPermitidosDeGalerias(){
+        List<Long> result = new ArrayList<>();
+        
+        if(user == null){
+            return result;
+        }
+        GaleriaDao galeriaDao = new GaleriaDao();
+        List<Galeria> galerias = galeriaDao.listByUsuario(user);
+        for (Galeria g : galerias){
+            result.add(g.getId());
+        }
+        
+        return result;
     }
 }

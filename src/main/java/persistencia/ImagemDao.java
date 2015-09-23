@@ -58,8 +58,9 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	    }
 	    try (Connection connection = conexao.getConnection();
 		PreparedStatement ps = connection.prepareStatement(query)) {
-		ps.setString(2, entity.getNome());
-		ps.setLong(3, entity.getGaleria().getId());
+		ps.setString(1, entity.getNome());
+		ps.setString(3, entity.getExtensao());
+		ps.setLong(2, entity.getGaleria().getId());
 		ResultSet rs = ps.executeQuery();
 		
 		

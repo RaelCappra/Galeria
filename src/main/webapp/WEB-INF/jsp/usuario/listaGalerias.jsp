@@ -14,6 +14,9 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <h1 class="error">
+            ${mensagem}
+        </h1>
         <h1>Galerias de ${nome}</h1>
         <hr/>
         
@@ -27,5 +30,8 @@
 	    <label for="nome">Nome</label> <input type="text" id="nome" name="galeria.nome"><br>
 	    <input type="submit">
 	</form>
+            
+            <br>
+        <a href="${linkTo[UsuarioController].logout}">Logout</a>
     </body>
 </html>

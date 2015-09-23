@@ -17,7 +17,8 @@
         <h1>${galeria.nome}</h1>
         <hr/>
         <c:forEach items="${imagemList}" var="imagem">
-            ${imagem.id}.${imagem.extensao}<br>
+            <b>${imagem.nome}</b><br>
+            <img width="200" heigth="200" src="../../uploads/${imagem.fileName}"><br>
         </c:forEach><br>
         
         <form action="${pageContext.request.contextPath}/galeria/addImagem" enctype="multipart/form-data" method="post">
