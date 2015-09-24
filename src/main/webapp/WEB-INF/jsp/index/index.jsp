@@ -11,27 +11,25 @@
         <c:import url="../lib/header.jsp"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        
+
     </head>
     <body>
-        <h2 class="error">${mensagem}</h2>
- 
-        Login:<br><br>
-        <form action="${pageContext.request.contextPath}/index/login" method="post">
-            Email: <input type="text" name="email"> <br>
-            Senha: <input type="password" name="senha"> <br>
-            <input type="submit">
-        </form>
-            
-        <hr>
-        
-        Cadastre-se:<br>
-        <form action="/index/cadastro" method="post"> <br>
-            Email: <input type="text" name="usuario.email"> <br>
-            Nome: <input type="text" name="usuario.nome"> <br>
-            Senha: <input type="password" name="usuario.senha"> <br>
-            <input type="submit">
-        </form>
+        <div class="content container">
+            <h2 class="error">${mensagem}</h2>
 
+            <h2>Login:</h2><br><br>
+            <form action="${pageContext.request.contextPath}/index/login" method="post" id="login">
+                <div class="form-group-lg">
+                    <div class="form-group" >
+                        <label for="email">Email:</label> <input type="text" name="email" id="email"> <br>
+                    </div>
+                    <div class="form-group" >
+                        <label for="senha">Senha: </label><input type="password" name="senha" id="senha"> <br>
+                    </div>
+                    <div class="form-group" >
+                        <button type="submit" class="btn-default btn" form="login">Enviar</button>
+                    </div>
+                </div>
+            </form>
     </body>
 </html>

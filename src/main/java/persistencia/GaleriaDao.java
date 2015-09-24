@@ -48,7 +48,8 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 	}
 
     }
-
+    
+    //TODO: Implementar soft delete
     @Override
     public void delete(Long id) {
 	String query = "delete from " + TABELA + " where id = ?";
@@ -148,6 +149,7 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 		ps.setString(1, nome);
 		ps.execute();
 	    } catch (SQLException e) {
+		System.out.println("errou");
 	    }
 	} catch (Exception ex) {
 	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);

@@ -32,12 +32,7 @@
             .slick-next {
                 margin-right: 40px;
             }*/
-
-            .content {
-                margin: auto;
-                padding: 20px;
-                width: 80%;
-            }
+            
             .slick-slide{
                 margin-left: 5%;
                 margin-right: 5%;

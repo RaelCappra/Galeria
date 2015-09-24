@@ -10,3 +10,9 @@ button.btn-success span{
 label.error{
     color: red;
 }
+
+.content {
+    margin: auto;
+    padding: 20px;
+    width: 87%;
+}
