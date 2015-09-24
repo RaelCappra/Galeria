@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Galeria;
+import model.Imagem;
 import model.Usuario;
 
 /**
@@ -47,8 +48,16 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 
     }
 
-    public void softDelete(Long id){
+    public void softDelete(Long id) {
 	String query = "update " + TABELA + " set deleted = true where id = ?";
+
+	ImagemDao imagemDao = new ImagemDao();
+	List<Imagem> imagens = imagemDao.listByGaleria(new Galeria(id, null, null));
+
+	for (Imagem imagem : imagens) {
+	    imagemDao.softDelete(imagem.getId());
+	}
+
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
 		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
@@ -60,12 +69,17 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 	    } catch (SQLException e) {
 		//TODO: ERRO: nao foi deletada a Galeria
 		System.out.println("");
+		throw new Exception(e);
 	    }
 	} catch (Exception ex) {
+	    /*TODO: Restore
+	    for (Imagem imagem : imagens) {
+		imagemDao.restore(imagem.getId());
+	    }*/
 	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
-    
+
     @Override
     public void delete(Long id) {
 	String query = "delete from " + TABELA + " where id = ?";
@@ -205,6 +219,7 @@ public class GaleriaDao implements Dao<Galeria, Long> {
     public List<Galeria> listByUsuario(Usuario usuario) {
 	return listByUsuario(usuario, false);
     }
+
     public List<Galeria> listByUsuario(Usuario usuario, boolean getDeleted) {
 	String query;
 	if (getDeleted) {
@@ -212,7 +227,7 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 	} else {
 	    query = "select * from " + TABELA + " where usuario = ? and deleted=false";
 	}
-	
+
 	List<Galeria> result = new ArrayList<>();
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
