@@ -34,6 +34,13 @@
                     </span>
                     <input type="hidden" value="${galeria.id}" name="galeria.id">
                 </form>
+
+                <a href="${linkTo[UsuarioController].deleteGaleria(galeria.id)}">
+                    <button>
+                        <span title="deletar" class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </a>
+
                 <a href="${linkTo[UsuarioController].viewGaleria(galeria.id)}">
                     <img alt="thumbnail" class="thumbnail" width="50" height="50" src="${pageContext.request.contextPath}/${galeria.thumbnail}">
                 </a><br>

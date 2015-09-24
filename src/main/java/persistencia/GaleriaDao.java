@@ -98,7 +98,7 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 	}
     }
     
-    void restore(long id) {
+    public void restore(long id) {
 	String query = "update " + TABELA + " set deleted = false where id = ?";
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {

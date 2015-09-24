@@ -67,10 +67,7 @@
                         <span>
                             <a href="${linkTo[GaleriaController].deleteImagem(imagem.id)}">
                                 <button>
-
-
-                                    <span title="editar titulo" class="glyphicon glyphicon-trash"></span>
-
+                                    <span title="deletar" class="glyphicon glyphicon-trash"></span>
                                 </button>
                             </a>
 

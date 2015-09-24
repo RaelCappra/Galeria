@@ -70,6 +70,7 @@ public class UsuarioController {
         result.redirectTo(this).listaGalerias();
     }
     
+    @br.com.caelum.vraptor.Path("usuario/deleteGaleria/{id}/")
     public void deleteGaleria(Long id){
 	if (!sessao.getIdsPermitidosDeGalerias().contains(id)) {
             result.include("mensagem", "Acesso Negado");
