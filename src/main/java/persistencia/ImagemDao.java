@@ -275,4 +275,23 @@ public class ImagemDao implements Dao<Imagem, Long> {
 
 	return result;
     }
+
+    void restore(long id) {
+	String query = "update " + TABELA + " set deleted = false where id = ?";
+	try {
+	    if (conexao == null || conexao.getConnection().isClosed()) {
+		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
+	    }
+	    try (Connection connection = conexao.getConnection();
+		PreparedStatement ps = connection.prepareStatement(query)) {
+		ps.setLong(1, id);
+		ps.execute();
+	    } catch (SQLException e) {
+		//TODO: ERRO: nao foi deletada a Imagem
+		System.out.println("");
+	    }
+	} catch (Exception ex) {
+	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }
 }

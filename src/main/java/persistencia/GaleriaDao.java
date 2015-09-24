@@ -72,10 +72,9 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 		throw new Exception(e);
 	    }
 	} catch (Exception ex) {
-	    /*TODO: Restore
 	    for (Imagem imagem : imagens) {
 		imagemDao.restore(imagem.getId());
-	    }*/
+	    }
 	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
