@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.3.5
 -- Dumped by pg_dump version 9.3.1
--- Started on 2015-09-22 21:00:08
+-- Started on 2015-09-24 01:52:42
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -22,7 +22,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 1975 (class 0 OID 0)
+-- TOC entry 1977 (class 0 OID 0)
 -- Dependencies: 176
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -44,7 +44,8 @@ SET default_with_oids = false;
 CREATE TABLE galeria (
     id integer NOT NULL,
     nome character varying NOT NULL,
-    usuario integer NOT NULL
+    usuario integer NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -66,7 +67,7 @@ CREATE SEQUENCE galeria_id_seq
 ALTER TABLE public.galeria_id_seq OWNER TO postgres;
 
 --
--- TOC entry 1976 (class 0 OID 0)
+-- TOC entry 1978 (class 0 OID 0)
 -- Dependencies: 172
 -- Name: galeria_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -83,7 +84,8 @@ CREATE TABLE imagem (
     id integer NOT NULL,
     nome character varying NOT NULL,
     galeria integer NOT NULL,
-    extensao character varying NOT NULL
+    extensao character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -105,7 +107,7 @@ CREATE SEQUENCE imagem_id_seq
 ALTER TABLE public.imagem_id_seq OWNER TO postgres;
 
 --
--- TOC entry 1977 (class 0 OID 0)
+-- TOC entry 1979 (class 0 OID 0)
 -- Dependencies: 174
 -- Name: imagem_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -144,7 +146,7 @@ CREATE SEQUENCE usuario_id_seq
 ALTER TABLE public.usuario_id_seq OWNER TO postgres;
 
 --
--- TOC entry 1978 (class 0 OID 0)
+-- TOC entry 1980 (class 0 OID 0)
 -- Dependencies: 170
 -- Name: usuario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -161,7 +163,7 @@ ALTER TABLE ONLY galeria ALTER COLUMN id SET DEFAULT nextval('galeria_id_seq'::r
 
 
 --
--- TOC entry 1840 (class 2604 OID 82292)
+-- TOC entry 1841 (class 2604 OID 82292)
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -177,7 +179,7 @@ ALTER TABLE ONLY usuario ALTER COLUMN id SET DEFAULT nextval('usuario_id_seq'::r
 
 
 --
--- TOC entry 1965 (class 0 OID 82271)
+-- TOC entry 1967 (class 0 OID 82271)
 -- Dependencies: 173
 -- Data for Name: galeria; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -185,16 +187,16 @@ ALTER TABLE ONLY usuario ALTER COLUMN id SET DEFAULT nextval('usuario_id_seq'::r
 
 
 --
--- TOC entry 1979 (class 0 OID 0)
+-- TOC entry 1981 (class 0 OID 0)
 -- Dependencies: 172
 -- Name: galeria_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('galeria_id_seq', 3, true);
+SELECT pg_catalog.setval('galeria_id_seq', 12, true);
 
 
 --
--- TOC entry 1967 (class 0 OID 82289)
+-- TOC entry 1969 (class 0 OID 82289)
 -- Dependencies: 175
 -- Data for Name: imagem; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -202,34 +204,35 @@ SELECT pg_catalog.setval('galeria_id_seq', 3, true);
 
 
 --
--- TOC entry 1980 (class 0 OID 0)
+-- TOC entry 1982 (class 0 OID 0)
 -- Dependencies: 174
 -- Name: imagem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('imagem_id_seq', 3, true);
+SELECT pg_catalog.setval('imagem_id_seq', 19, true);
 
 
 --
--- TOC entry 1963 (class 0 OID 82206)
+-- TOC entry 1965 (class 0 OID 82206)
 -- Dependencies: 171
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 INSERT INTO usuario (id, email, nome, senha) VALUES (1, 'test@test.com', 'Test', 'test');
+INSERT INTO usuario (id, email, nome, senha) VALUES (2, 'hacker@hacker.com', 'H4XX0R', 'hacker');
 
 
 --
--- TOC entry 1981 (class 0 OID 0)
+-- TOC entry 1983 (class 0 OID 0)
 -- Dependencies: 170
 -- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('usuario_id_seq', 1, true);
+SELECT pg_catalog.setval('usuario_id_seq', 2, true);
 
 
 --
--- TOC entry 1846 (class 2606 OID 82279)
+-- TOC entry 1848 (class 2606 OID 82279)
 -- Name: galeria_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -238,7 +241,7 @@ ALTER TABLE ONLY galeria
 
 
 --
--- TOC entry 1848 (class 2606 OID 82281)
+-- TOC entry 1850 (class 2606 OID 82281)
 -- Name: galeria_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -247,7 +250,7 @@ ALTER TABLE ONLY galeria
 
 
 --
--- TOC entry 1850 (class 2606 OID 82297)
+-- TOC entry 1852 (class 2606 OID 82297)
 -- Name: imagem_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -256,7 +259,7 @@ ALTER TABLE ONLY imagem
 
 
 --
--- TOC entry 1852 (class 2606 OID 82299)
+-- TOC entry 1854 (class 2606 OID 82299)
 -- Name: imagem_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -265,7 +268,7 @@ ALTER TABLE ONLY imagem
 
 
 --
--- TOC entry 1842 (class 2606 OID 82268)
+-- TOC entry 1844 (class 2606 OID 82268)
 -- Name: usuario_email_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -274,7 +277,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 1844 (class 2606 OID 82266)
+-- TOC entry 1846 (class 2606 OID 82266)
 -- Name: usuario_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -283,7 +286,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 1853 (class 2606 OID 82282)
+-- TOC entry 1855 (class 2606 OID 82282)
 -- Name: galeria_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -292,7 +295,7 @@ ALTER TABLE ONLY galeria
 
 
 --
--- TOC entry 1854 (class 2606 OID 82300)
+-- TOC entry 1856 (class 2606 OID 82300)
 -- Name: imagem_galeria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -301,7 +304,7 @@ ALTER TABLE ONLY imagem
 
 
 --
--- TOC entry 1974 (class 0 OID 0)
+-- TOC entry 1976 (class 0 OID 0)
 -- Dependencies: 5
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -312,7 +315,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2015-09-22 21:00:09
+-- Completed on 2015-09-24 01:52:42
 
 --
 -- PostgreSQL database dump complete
