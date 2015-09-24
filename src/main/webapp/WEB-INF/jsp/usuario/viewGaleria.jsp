@@ -21,7 +21,7 @@
         <hr/>
         <c:forEach items="${imagemList}" var="imagem">
             <b>${imagem.nome}</b><br>
-            <img width="200" heigth="200" src="../../uploads/${imagem.fileName}"><br>
+            <img alt="${imagem.nome}" height="200" width="200"  src="../../uploads/${imagem.fileName}"><br>
         </c:forEach><br>
         
         <form action="${pageContext.request.contextPath}/galeria/addImagem" enctype="multipart/form-data" method="post">
@@ -30,7 +30,8 @@
             <input type="hidden" value="${galeria.id}" name="galeriaId"/>
             <input type="submit"/>
         </form><br>
-            
+            <hr>
+        <a href="${linkTo[GaleriaController].zipGaleria(galeria.id)}">Download como zip</a><br>
         <a href="${linkTo[UsuarioController].listaGalerias}">Voltar</a>
     </body>
 </html>

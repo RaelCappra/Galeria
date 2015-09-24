@@ -40,7 +40,6 @@ public class UsuarioController {
 
     @Path("usuario/viewGaleria/{id}")
     public List<Imagem> viewGaleria(Long id) {
-        Usuario usuario = sessao.getUsuario();
         if (!sessao.getIdsPermitidosDeGalerias().contains(id)) {
             result.redirectTo(UsuarioController.class).listaGalerias();
             result.include("mensagem", "Acesso Negado");

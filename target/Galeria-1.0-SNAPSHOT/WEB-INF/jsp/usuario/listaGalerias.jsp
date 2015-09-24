@@ -22,7 +22,10 @@
         
         <c:forEach items="${galeriaList}" var="galeria">
             <!--<a href="viewGaleria/${galeria.id}">${galeria.nome}</a>-->
-            <a href="${linkTo[UsuarioController].viewGaleria(galeria.id)}">${galeria.nome}</a><br>
+            <a href="${linkTo[UsuarioController].viewGaleria(galeria.id)}">
+                ${galeria.nome}<br>
+                <img alt="thumbnail" class="thumbnail" width="50" height="50" src="${pageContext.request.contextPath}/${galeria.thumbnail}">
+            </a><br>
         </c:forEach><br>
         
 	Nova galeria:<br>

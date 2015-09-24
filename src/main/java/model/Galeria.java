@@ -5,6 +5,9 @@
  */
 package model;
 
+import java.util.List;
+import persistencia.ImagemDao;
+
 /**
  *
  * @author Rael
@@ -47,5 +50,13 @@ public class Galeria {
         this.nome = nome;
     }
     
-    
+    public String getThumbnail(){
+	List<Imagem> imagens = new ImagemDao().listByGaleria(this);
+	if (null == imagens || imagens.isEmpty()){
+	    return "assets/vazio.gif";
+	} else{
+	    Imagem imagem = imagens.get(0);
+	    return "uploads/" + imagem.getId() + "." + imagem.getExtensao();
+	}
+    }
 }
