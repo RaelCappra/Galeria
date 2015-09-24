@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.3.5
 -- Dumped by pg_dump version 9.3.1
--- Started on 2015-09-24 01:52:42
+-- Started on 2015-09-24 14:25:34
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -192,7 +192,7 @@ ALTER TABLE ONLY usuario ALTER COLUMN id SET DEFAULT nextval('usuario_id_seq'::r
 -- Name: galeria_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('galeria_id_seq', 12, true);
+SELECT pg_catalog.setval('galeria_id_seq', 17, true);
 
 
 --
@@ -209,7 +209,7 @@ SELECT pg_catalog.setval('galeria_id_seq', 12, true);
 -- Name: imagem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('imagem_id_seq', 19, true);
+SELECT pg_catalog.setval('imagem_id_seq', 29, true);
 
 
 --
@@ -295,12 +295,12 @@ ALTER TABLE ONLY galeria
 
 
 --
--- TOC entry 1856 (class 2606 OID 82300)
+-- TOC entry 1856 (class 2606 OID 82368)
 -- Name: imagem_galeria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY imagem
-    ADD CONSTRAINT imagem_galeria FOREIGN KEY (galeria) REFERENCES galeria(id);
+    ADD CONSTRAINT imagem_galeria FOREIGN KEY (galeria) REFERENCES galeria(id) ON DELETE CASCADE;
 
 
 --
@@ -315,7 +315,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2015-09-24 01:52:42
+-- Completed on 2015-09-24 14:25:35
 
 --
 -- PostgreSQL database dump complete
