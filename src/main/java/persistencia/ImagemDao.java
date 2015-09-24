@@ -48,7 +48,7 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	}
 
     }
-    
+
     public Long saveReturningId(Imagem entity) {
 	String query = "insert into " + TABELA + " (nome, galeria, extensao) values (?, ?, ?) returning id";
 	Long id = null;
@@ -62,13 +62,11 @@ public class ImagemDao implements Dao<Imagem, Long> {
 		ps.setString(3, entity.getExtensao());
 		ps.setLong(2, entity.getGaleria().getId());
 		ResultSet rs = ps.executeQuery();
-		
-		
+
 		if (rs.next()) {
 		    id = rs.getLong("id");
 		}
-		
-		
+
 	    } catch (SQLException e) {
 		//TODO: ERRO: nao foi adicionada o usuario
 	    }
@@ -77,12 +75,11 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	}
 	return id;
     }
-    
-    
-    public void softDelete(Long id){
+
+    public void softDelete(Long id) {
 	//TODO: soft delete
     }
-    
+
     @Override
     public void delete(Long id) {
 	String query = "delete from " + TABELA + " where id = ?";
@@ -104,7 +101,16 @@ public class ImagemDao implements Dao<Imagem, Long> {
 
     @Override
     public List<Imagem> listAll() {
-	String query = "select * from " + TABELA;
+	return listAll(false);
+    }
+
+    public List<Imagem> listAll(boolean getDeleted) {
+	String query;
+	if (!getDeleted) {
+	    query = "select * from " + TABELA + "where deleted=false";
+	} else {
+	    query = "select * from " + TABELA;
+	}
 	List<Imagem> result = new ArrayList<>();
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
@@ -138,8 +144,18 @@ public class ImagemDao implements Dao<Imagem, Long> {
 
     @Override
     public Imagem getById(Long pk) {
+	return getById(pk, false);
+    }
+
+    public Imagem getById(Long pk, boolean getDeleted) {
 	Imagem result = null;
-	String query = "select * from " + TABELA + " where id = ?";
+	String query;
+	if (getDeleted) {
+	    query = "select * from " + TABELA + " where id = ?";
+	} else {
+	    query = "select * from " + TABELA + " where id = ? and deleted = false";
+	}
+
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
 		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
@@ -171,10 +187,20 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	}
 	return result;
     }
+    
+    public void edit(long id, String nome){
+	edit(id, nome, true);
+    }
+    
+    public void edit(long id, String nome, boolean affectDeleted) {
 
+	String query;
+	if (affectDeleted) {
+	    query = "update " + TABELA + " set nome = ? where id = ?";
+	} else {
+	    query = "update " + TABELA + " set nome = ? where id = ? and deleted = false";
+	}
 
-    public void edit(long id, String nome) {
-	String query = "update " + TABELA + " set nome = ? where id = ?;";
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
 		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
@@ -190,9 +216,19 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
-
-    public List<Imagem> listByGaleria(Galeria galeria) {
-	String query = "select * from " + TABELA + " where galeria = ?";
+    
+    public List<Imagem> listByGaleria(Galeria galeria){
+	return listByGaleria(galeria, false);
+    }
+    
+    public List<Imagem> listByGaleria(Galeria galeria, boolean getDeleted) {
+	String query;
+	if(getDeleted){
+	    query = "select * from " + TABELA + " where galeria = ?";
+	}
+	else{
+	    query = "select * from " + TABELA + " where galeria = ? and deleted=false";
+	}
 	List<Imagem> result = new ArrayList<>();
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
@@ -214,15 +250,16 @@ public class ImagemDao implements Dao<Imagem, Long> {
 		    imagem.setGaleria(galeria);
 
 		    result.add(imagem);
+
 		}
 	    } catch (SQLException e) {
 		//TODO: ERRO: nao ocorreu a listagem
 	    }
 	} catch (Exception ex) {
-	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(UsuarioDao.class
+		.getName()).log(Level.SEVERE, null, ex);
 	}
 
 	return result;
     }
 }
-
