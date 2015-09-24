@@ -77,7 +77,12 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	}
 	return id;
     }
-
+    
+    
+    public void softDelete(Long id){
+	//TODO: soft delete
+    }
+    
     @Override
     public void delete(Long id) {
 	String query = "delete from " + TABELA + " where id = ?";

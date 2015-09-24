@@ -112,6 +112,25 @@ public class GaleriaController {
 	}
     }
 
+    public void editImagem(Imagem imagem) {
+	System.out.println("Entrou");
+    }
+    
+    @br.com.caelum.vraptor.Path("galeria/deleteImagem/{id}/")
+    public void deleteImagem(Long id) {
+	Imagem imagem = imagemDao.getById(id);
+	long galeriaId = imagem.getGaleria().getId();
+	
+	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
+	    result.include("mensagem", "Acesso Negado");
+	    result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
+	    return;
+	}
+	
+	imagemDao.delete(id);
+	result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
+    }
+
     @br.com.caelum.vraptor.Path("galeria/zipGaleria/{galeriaId}")
     public Download zipGaleria(long galeriaId) {
 	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
@@ -146,12 +165,12 @@ public class GaleriaController {
 		    BufferedInputStream bis = new BufferedInputStream(fis)) {
 		    String pathFileName = path.getFileName().toString();
 		    zos.putNextEntry(new ZipEntry(pathFileName));
-		    
+
 		    int bytesRead;
 		    while ((bytesRead = bis.read(buffer)) != -1) {
 			zos.write(buffer, 0, bytesRead);
 		    }
-		    
+
 		    zos.closeEntry();
 		    zos.flush();
 		} catch (IOException e) {
