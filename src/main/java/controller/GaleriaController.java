@@ -136,7 +136,7 @@ public class GaleriaController {
 	    return;
 	}
 	
-	imagemDao.delete(id);
+	imagemDao.softDelete(id);
 	result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
     }
 

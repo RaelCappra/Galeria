@@ -77,7 +77,22 @@ public class ImagemDao implements Dao<Imagem, Long> {
     }
 
     public void softDelete(Long id) {
-	//TODO: soft delete
+	String query = "update " + TABELA + " set deleted = true where id = ?";
+	try {
+	    if (conexao == null || conexao.getConnection().isClosed()) {
+		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
+	    }
+	    try (Connection connection = conexao.getConnection();
+		PreparedStatement ps = connection.prepareStatement(query)) {
+		ps.setLong(1, id);
+		ps.execute();
+	    } catch (SQLException e) {
+		//TODO: ERRO: nao foi deletada a Galeria
+		System.out.println("");
+	    }
+	} catch (Exception ex) {
+	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     @Override
@@ -187,11 +202,11 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	}
 	return result;
     }
-    
-    public void edit(long id, String nome){
-	edit(id, nome, true);
+
+    public void edit(long id, String nome) {
+	edit(id, nome, false);
     }
-    
+
     public void edit(long id, String nome, boolean affectDeleted) {
 
 	String query;
@@ -216,17 +231,16 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
-    
-    public List<Imagem> listByGaleria(Galeria galeria){
+
+    public List<Imagem> listByGaleria(Galeria galeria) {
 	return listByGaleria(galeria, false);
     }
-    
+
     public List<Imagem> listByGaleria(Galeria galeria, boolean getDeleted) {
 	String query;
-	if(getDeleted){
+	if (getDeleted) {
 	    query = "select * from " + TABELA + " where galeria = ?";
-	}
-	else{
+	} else {
 	    query = "select * from " + TABELA + " where galeria = ? and deleted=false";
 	}
 	List<Imagem> result = new ArrayList<>();
