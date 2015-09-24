@@ -113,7 +113,16 @@ public class GaleriaController {
     }
 
     public void editImagem(Imagem imagem) {
-	System.out.println("Entrou");
+	long galeriaId = imagemDao.getById(imagem.getId()).getGaleria().getId();
+	
+	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
+	    result.include("mensagem", "Acesso Negado");
+	    result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
+	    return;
+	}
+	
+	imagemDao.edit(imagem.getId(), imagem.getNome());
+	result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
     }
     
     @br.com.caelum.vraptor.Path("galeria/deleteImagem/{id}/")
