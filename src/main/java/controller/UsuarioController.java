@@ -69,6 +69,18 @@ public class UsuarioController {
         galeriaDao.edit(galeria.getId(), galeria.getNome());
         result.redirectTo(this).listaGalerias();
     }
+    
+    public void deleteGaleria(Long id){
+	if (!sessao.getIdsPermitidosDeGalerias().contains(id)) {
+            result.include("mensagem", "Acesso Negado");
+	    result.redirectTo(UsuarioController.class).listaGalerias();
+            
+            return;
+        }
+	
+	galeriaDao.softDelete(id);
+	result.redirectTo(this).listaGalerias();
+    }
 
     @Path({"/usuario/logout", "/usuario/logout/"})
     public void logout() {
