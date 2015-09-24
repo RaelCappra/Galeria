@@ -14,7 +14,9 @@ import java.util.List;
  * @param <PK>
  */
 public interface Dao<T, PK> {
-
+    
+    static final String DATABASE = "galeria";
+    
     void save(T entity);
 
     void delete(PK id);

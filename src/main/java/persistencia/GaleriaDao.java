@@ -26,8 +26,6 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 
     private static final String TABELA = "galeria";
 
-    private static final String DATABASE = "galeria";
-
     @Override
     public void save(Galeria entity) {
 	String query = "insert into " + TABELA + " (nome, usuario) values (?, ?)";

@@ -18,8 +18,6 @@ public class UsuarioDao implements Dao<Usuario, Long> {
 
     private static final String TABELA = "usuario";
     
-    private static final String DATABASE = "galeria";
-    
     @Override
     public void save(Usuario entity) {
 	String query = "insert into " + TABELA + " (email, nome, senha) values (?, ?, ?)";

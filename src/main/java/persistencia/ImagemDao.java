@@ -25,8 +25,7 @@ public class ImagemDao implements Dao<Imagem, Long> {
     private static ConexaoPostgreSQL conexao;
 
     private static final String TABELA = "imagem";
-
-    private static final String DATABASE = "galeria";
+    
 
     @Override
     public void save(Imagem entity) {
