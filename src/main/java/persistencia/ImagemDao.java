@@ -276,7 +276,7 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	return result;
     }
 
-    void restore(long id) {
+    public void restore(long id) {
 	String query = "update " + TABELA + " set deleted = false where id = ?";
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
