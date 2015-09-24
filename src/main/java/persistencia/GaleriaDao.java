@@ -46,7 +46,7 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 	}
 
     }
-    
+
     //TODO: Implementar soft delete
     @Override
     public void delete(Long id) {
@@ -69,7 +69,16 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 
     @Override
     public List<Galeria> listAll() {
-	String query = "select * from " + TABELA;
+	return listAll(false);
+    }
+
+    public List<Galeria> listAll(boolean getDeleted) {
+	String query;
+	if (!getDeleted) {
+	    query = "select * from " + TABELA + "where deleted=false";
+	} else {
+	    query = "select * from " + TABELA;
+	}
 	List<Galeria> result = new ArrayList<>();
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
@@ -103,8 +112,20 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 
     @Override
     public Galeria getById(Long pk) {
+	return getById(pk, false);
+    }
+
+    public Galeria getById(Long pk, boolean getDeleted) {
 	Galeria result = null;
-	String query = "select * from " + TABELA + " where id = ?";
+
+	String query;
+	if (getDeleted) {
+	    query = "select * from " + TABELA + " where id = ?";
+	} else {
+	    query = "select * from " + TABELA + " where id = ? and deleted = false";
+	}
+
+	//String query = "select * from " + TABELA + " where id = ?";
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
 		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
@@ -136,7 +157,16 @@ public class GaleriaDao implements Dao<Galeria, Long> {
     }
 
     public void edit(long id, String nome) {
-	String query = "update " + TABELA + " set  nome = ? where id = ?;";
+	edit(id, nome, false);
+    }
+
+    public void edit(long id, String nome, boolean affectDeleted) {
+	String query;
+	if (affectDeleted) {
+	    query = "update " + TABELA + " set nome = ? where id = ?";
+	} else {
+	    query = "update " + TABELA + " set nome = ? where id = ? and deleted = false";
+	}
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
 		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
@@ -155,7 +185,16 @@ public class GaleriaDao implements Dao<Galeria, Long> {
     }
 
     public List<Galeria> listByUsuario(Usuario usuario) {
-	String query = "select * from " + TABELA + " where usuario = ?";
+	return listByUsuario(usuario, false);
+    }
+    public List<Galeria> listByUsuario(Usuario usuario, boolean getDeleted) {
+	String query;
+	if (getDeleted) {
+	    query = "select * from " + TABELA + " where usuario = ?";
+	} else {
+	    query = "select * from " + TABELA + " where usuario = ? and deleted=false";
+	}
+	
 	List<Galeria> result = new ArrayList<>();
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
