@@ -86,7 +86,7 @@ public class ImagemDao implements Dao<Imagem, Long> {
 		ps.setLong(1, id);
 		ps.execute();
 	    } catch (SQLException e) {
-		//TODO: ERRO: nao foi deletada a Galeria
+		//TODO: ERRO: nao foi deletada a Imagem
 		System.out.println("");
 	    }
 	} catch (Exception ex) {
