@@ -34,8 +34,8 @@
             }*/
             
             .slick-slide{
-                margin-left: 5%;
-                margin-right: 5%;
+                margin-left: 2%;
+                //margin-right: 5%;
             }
         </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

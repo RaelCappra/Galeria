@@ -48,6 +48,31 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 
     }
 
+    public Long saveReturningId(Galeria entity) {
+	String query = "insert into " + TABELA + " (nome, usuario) values (?, ?) returning id";
+	Long id = null;
+	try {
+	    if (conexao == null || conexao.getConnection().isClosed()) {
+		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
+	    }
+	    try (Connection connection = conexao.getConnection();
+		PreparedStatement ps = connection.prepareStatement(query)) {
+		ps.setString(1, entity.getNome());
+		ps.setLong(2, entity.getUsuario().getId());
+		ResultSet rs = ps.executeQuery();
+
+		if (rs.next()) {
+		    id = rs.getLong("id");
+		}
+	    } catch (SQLException e) {
+		//TODO: ERRO: nao foi adicionada o usuario
+	    }
+	} catch (Exception ex) {
+	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	return id;
+    }
+
     public void softDelete(Long id) {
 	String query = "update " + TABELA + " set deleted = true where id = ?";
 
@@ -97,7 +122,7 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
-    
+
     public void restore(long id) {
 	String query = "update " + TABELA + " set deleted = false where id = ?";
 	try {
@@ -116,7 +141,7 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 	    Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
-    
+
     @Override
     public List<Galeria> listAll() {
 	return listAll(false);
@@ -275,4 +300,5 @@ public class GaleriaDao implements Dao<Galeria, Long> {
 
 	return result;
     }
+
 }

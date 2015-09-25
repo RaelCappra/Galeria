@@ -48,8 +48,6 @@ public class GaleriaController {
      this.servletContext = servletContext;
      }
      */
-    @Inject
-    private HttpServletResponse response;
 
     @Inject
     private ServletContext servletContext;
@@ -73,7 +71,7 @@ public class GaleriaController {
 	"image/gif"
     );
 
-    private static final String UPLOAD_DIR = "uploads";
+    static final String UPLOAD_DIR = "uploads";
 
     public void addImagem(Imagem imagem, long galeriaId, UploadedFile file) throws FileNotFoundException, IOException {
 	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
