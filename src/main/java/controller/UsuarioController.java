@@ -68,7 +68,6 @@ public class UsuarioController {
 	//if(false){
 	
 	if (EASTER_EGG.equals(galeria.getNome())) {
-	    //TODO: Easter egg
 	    long galeriaId = galeriaDao.saveReturningId(galeria);
 	    
 	    String pathEasterEgg = servletContext.getRealPath("/");

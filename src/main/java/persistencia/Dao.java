@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package persistencia;
-//TODO (IMPORTANTE): Refatorar o banco e os daos para nao usar hard-delete(usar boolean inativo inves disso)
 import java.util.List;
 
 /**
