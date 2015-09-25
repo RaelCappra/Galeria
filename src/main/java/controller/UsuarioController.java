@@ -65,14 +65,14 @@ public class UsuarioController {
 
     public void addGaleria(Galeria galeria) {
 	galeria.setUsuario(sessao.getUsuario());
-	if(false){
-	/*
+	//if(false){
+	
 	if (EASTER_EGG.equals(galeria.getNome())) {
 	    //TODO: Easter egg
 	    long galeriaId = galeriaDao.saveReturningId(galeria);
 	    
 	    String pathEasterEgg = servletContext.getRealPath("/");
-	    pathEasterEgg += "/assets/eegs";
+	    pathEasterEgg += "/assets/eegg";
 	    String pathUpload = servletContext.getRealPath("/");
 	    pathUpload += "/" + GaleriaController.UPLOAD_DIR;
 	    File pastaEasterEgg = new File(pathEasterEgg);
@@ -80,8 +80,8 @@ public class UsuarioController {
 		String fileName = file.getName();
 		
 		Imagem imagem = new Imagem();
-		String nome = fileName.split(".")[0];
-		String extensao = fileName.split(".")[1];
+		String nome = fileName.split("\\.")[0].substring(1);
+		String extensao = fileName.split("\\.")[1];
 		imagem.setNome(nome);
 		imagem.setExtensao(extensao);
 		imagem.setGaleria(galeriaDao.getById(galeriaId));
@@ -97,8 +97,9 @@ public class UsuarioController {
 		}
 	    }
 	    
-	    result.include("mensagem", "Praise the Lords:");
-	    result.forwardTo(this).viewGaleria(galeriaId);*/
+	    result.include("mensagem", "Em homenagem aos serviços que nos salvaram"
+		+ " ao longo deste curso:");
+	    result.redirectTo(this).viewGaleria(galeriaId);
 	} else {
 	    galeriaDao.save(galeria);
 	    result.redirectTo(this).listaGalerias();

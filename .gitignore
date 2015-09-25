@@ -16,3 +16,4 @@ hs_err_pid*
 *.jpg
 *.bmp
 !src/main/webapp/assets/*.gif
+!src/main/webapp/assets/eegg/*
