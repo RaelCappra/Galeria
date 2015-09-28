@@ -12,12 +12,13 @@
         <c:import url="../lib/header.jsp"/>
         <link rel="stylesheet" type="text/css" href="<c:url value="/js/slick/slick.css"/>"/>
         <link rel="stylesheet" type="text/css" href="<c:url value="/js/slick/slick-theme.css"/>"/>
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/galeria.css"/>"/>
         <script src="<c:url value="/js/slick/slick.min.js"/>" type="text/javascript" ></script>
         <script type="text/javascript">
             $(document).ready(function () {
                 $('.galeria').slick({
                     infinite: true,
-                    arrows: true,
+                    arrows: true
                 });
             });
         </script>
@@ -73,7 +74,7 @@
 
                         </span>
                         <br>
-                        <img alt="${imagem.nome}"  src="../../uploads/${imagem.fileName}">
+                        <img class="imagem" alt="${imagem.nome}"  src="../../uploads/${imagem.fileName}">
                     </div>
                     </form>
                 </c:forEach>

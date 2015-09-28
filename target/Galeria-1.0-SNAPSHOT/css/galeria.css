@@ -1,0 +1,6 @@
+img.imagem {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    max-height: 600px;
+}
