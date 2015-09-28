@@ -15,9 +15,9 @@
     </head>
     <body>
         <div class="content container">
-            <h1 class="error">
+            <%--<h1 class="error">
                 ${mensagem}
-            </h1>
+            </h1>--%>
             <h1>Galerias de ${nome}</h1>
             <hr/>
 
