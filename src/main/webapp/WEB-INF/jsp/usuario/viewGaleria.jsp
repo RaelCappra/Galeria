@@ -44,6 +44,7 @@
     </head>
     <body>
         <div class="content container">
+            <h1>${mensagem}</h1>
             <c:forEach var="error" items="${errors}">
                 <h1 class="error">
                     ${error.message}<br>

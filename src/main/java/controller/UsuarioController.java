@@ -3,6 +3,8 @@ package controller;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.validator.SimpleMessage;
+import br.com.caelum.vraptor.validator.Validator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +14,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
+import javax.validation.Valid;
 import model.Galeria;
 import model.Imagem;
 import model.Usuario;
@@ -24,7 +27,10 @@ import sessao.UsuarioSessao;
 @Any
 @Default
 public class UsuarioController {
-
+    
+    @Inject
+    private Validator validator;
+    
     @Inject
     private ServletContext servletContext;
 
@@ -63,8 +69,9 @@ public class UsuarioController {
 	}
     }
 
-    public void addGaleria(Galeria galeria) {
-	galeria.setUsuario(sessao.getUsuario());
+    public void addGaleria(@Valid Galeria galeria) {
+	validator.onErrorRedirectTo(UsuarioController.class).listaGalerias();
+        galeria.setUsuario(sessao.getUsuario());
 	//if(false){
 	
 	if (EASTER_EGG.equals(galeria.getNome())) {
@@ -105,13 +112,10 @@ public class UsuarioController {
 	}
     }
 
-    public void editGaleria(Galeria galeria) {
-	if (!sessao.getIdsPermitidosDeGalerias().contains(galeria.getId())) {
-	    result.include("mensagem", "Acesso Negado");
-	    result.redirectTo(UsuarioController.class).listaGalerias();
-
-	    return;
-	}
+    public void editGaleria(@Valid Galeria galeria) {
+        validator.ensure(sessao.getIdsPermitidosDeGalerias().contains(galeria.getId()), new SimpleMessage("galeria", "Acesso negado"));
+        validator.onErrorRedirectTo(UsuarioController.class).listaGalerias();
+        
 	galeriaDao.edit(galeria.getId(), galeria.getNome());
 	result.redirectTo(this).listaGalerias();
     }
