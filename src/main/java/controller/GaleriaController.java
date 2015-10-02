@@ -50,7 +50,6 @@ public class GaleriaController {
      this.servletContext = servletContext;
      }
      */
-    
     @Inject
     private Validator validator;
 
@@ -70,134 +69,124 @@ public class GaleriaController {
     private ImagemDao imagemDao;
 
     private static final List<String> ACCEPTED_TYPES = Arrays.asList(
-	"image/jpeg",
-	"image/png",
-	"image/bmp",
-	"image/gif"
+            "image/jpeg",
+            "image/png",
+            "image/bmp",
+            "image/gif"
     );
 
     static final String UPLOAD_DIR = "uploads";
 
     public void addImagem(@Valid Imagem imagem, long galeriaId, UploadedFile file) throws FileNotFoundException, IOException {
-	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
-	    result.redirectTo(UsuarioController.class).listaGalerias();
-	} else {
+        if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
+            result.redirectTo(UsuarioController.class).listaGalerias();
+        } else {
 
-	    if (null != file) {
-		//String extensao = file.getFileName().substring(file.getFileName().indexOf("."), file.getFileName().length());
-		String tipo = file.getContentType();
+            if (null != file) {
+                //String extensao = file.getFileName().substring(file.getFileName().indexOf("."), file.getFileName().length());
+                String tipo = file.getContentType();
+                validator.ensure(ACCEPTED_TYPES.contains(tipo), new SimpleMessage("imagem", "Erro: tipo ilegal de imagem"));
+                validator.onErrorRedirectTo(UsuarioController.class).viewGaleria(galeriaId);   
+                
+                String extensao = tipo.split("/")[1];
+                imagem.setExtensao(extensao);
+                imagem.setGaleria(galeriaDao.getById(galeriaId));
+                Long id = imagemDao.saveReturningId(imagem);
 
-		if (!ACCEPTED_TYPES.contains(tipo)) {
-		    result.include("mensagem", "Erro: tipo ilegal de imagem");
-		    result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
-		} else {
-		    String extensao = tipo.split("/")[1];
-		    imagem.setExtensao(extensao);
-		    imagem.setGaleria(galeriaDao.getById(galeriaId));
-		    Long id = imagemDao.saveReturningId(imagem);
+                String realPath = servletContext.getRealPath("/");//"/home/aluno/Galeria/src/main/webapp";
 
-		    String realPath = servletContext.getRealPath("/");//"/home/aluno/Galeria/src/main/webapp";
+                String fullName = realPath + "/" + UPLOAD_DIR + "/" + id + "." + extensao;
 
-		    String fullName = realPath + "/" + UPLOAD_DIR + "/" + id + "." + extensao;
+                File f = new File(fullName);
 
-		    File f = new File(fullName);
+                IOUtils.copyLarge(file.getFile(), new FileOutputStream(f));
 
-		    IOUtils.copyLarge(file.getFile(), new FileOutputStream(f));
+                //result.include("mensagem", "O arquivo foi adicionado");
+                this.result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
 
-		    //result.include("mensagem", "O arquivo foi adicionado");
-		    this.result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
-		}
-
-	    } else {
-		result.include("mensagem", "Nenhum arquivo foi selecionado...");
-		this.result.forwardTo(UsuarioController.class).viewGaleria(galeriaId);
-	    }
-	}
+            } else {
+                result.include("mensagem", "Nenhum arquivo foi selecionado...");
+                this.result.forwardTo(UsuarioController.class).viewGaleria(galeriaId);
+            }
+        }
     }
 
     public void editImagem(@Valid Imagem imagem) {
-        
-	long galeriaId = imagemDao.getById(imagem.getId()).getGaleria().getId();
-	validator.onErrorRedirectTo(UsuarioController.class).viewGaleria(galeriaId);
-	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
-	    result.include("mensagem", "Acesso Negado");
-	    result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
-	    return;
-	}
-	
-	imagemDao.edit(imagem.getId(), imagem.getNome(), imagem.getDescricao());
-	result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
+
+        long galeriaId = imagemDao.getById(imagem.getId()).getGaleria().getId();
+        validator.ensure(sessao.getIdsPermitidosDeGalerias().contains(galeriaId), new SimpleMessage("galeria", "Acesso negado"));
+        validator.onErrorRedirectTo(UsuarioController.class).viewGaleria(galeriaId);
+
+        imagemDao.edit(imagem.getId(), imagem.getNome(), imagem.getDescricao());
+        result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
     }
-    
+
     @br.com.caelum.vraptor.Path("galeria/deleteImagem/{id}/")
     public void deleteImagem(Long id) {
-	Imagem imagem = imagemDao.getById(id);
-	long galeriaId = imagem.getGaleria().getId();
-	
-	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
-	    result.include("mensagem", "Acesso Negado");
-	    result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
-	    return;
-	}
-	
-	imagemDao.softDelete(id);
-	result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
+        Imagem imagem = imagemDao.getById(id);
+        long galeriaId = imagem.getGaleria().getId();
+
+        validator.ensure(sessao.getIdsPermitidosDeGalerias().contains(galeriaId), new SimpleMessage("galeria", "Acesso negado"));
+        validator.onErrorRedirectTo(UsuarioController.class).viewGaleria(galeriaId);
+
+        imagemDao.softDelete(id);
+        result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
     }
 
     @br.com.caelum.vraptor.Path("galeria/zipGaleria/{galeriaId}")
     public Download zipGaleria(long galeriaId) {
         validator.ensure(sessao.getIdsPermitidosDeGalerias().contains(galeriaId), new SimpleMessage("galeria", "Acesso negado"));
-	Galeria galeria = new Galeria();
-	galeria.setId(galeriaId);
-	List<Imagem> imagens = imagemDao.listByGaleria(galeria);
-        
+        Galeria galeria = new Galeria();
+        galeria.setId(galeriaId);
+        List<Imagem> imagens = imagemDao.listByGaleria(galeria);
+
         validator.addIf(imagens == null || imagens.isEmpty(), new SimpleMessage("galeria", "Galeria vazia"));
         validator.onErrorRedirectTo(UsuarioController.class).viewGaleria(galeriaId);
-        
-	List<Path> paths = new ArrayList<>();
-	for (Imagem imagem : imagens) {
-	    String realPath = servletContext.getRealPath("/");
-	    java.nio.file.Path imagemPath = new File(realPath + "/" + UPLOAD_DIR + "/" + imagem.getFileName()).toPath();
-	    paths.add(imagemPath);
-	}
 
-	byte buffer[] = new byte[2048];
-	try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    ZipOutputStream zos = new ZipOutputStream(baos)) {
-	    zos.setMethod(ZipOutputStream.DEFLATED);
-	    zos.setLevel(5);
-	    for (Path path : paths) {
+        List<Path> paths = new ArrayList<>();
+        for (Imagem imagem : imagens) {
+            String realPath = servletContext.getRealPath("/");
+            java.nio.file.Path imagemPath = new File(realPath + "/" + UPLOAD_DIR + "/" + imagem.getFileName()).toPath();
+            paths.add(imagemPath);
+        }
 
-		try (FileInputStream fis = new FileInputStream(path.toFile());
-		    BufferedInputStream bis = new BufferedInputStream(fis)) {
-		    String pathFileName = path.getFileName().toString();
-		    zos.putNextEntry(new ZipEntry(pathFileName));
+        byte buffer[] = new byte[2048];
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ZipOutputStream zos = new ZipOutputStream(baos)) {
+            zos.setMethod(ZipOutputStream.DEFLATED);
+            zos.setLevel(5);
+            for (Path path : paths) {
 
-		    int bytesRead;
-		    while ((bytesRead = bis.read(buffer)) != -1) {
-			zos.write(buffer, 0, bytesRead);
-		    }
+                try (FileInputStream fis = new FileInputStream(path.toFile());
+                        BufferedInputStream bis = new BufferedInputStream(fis)) {
+                    String pathFileName = path.getFileName().toString();
+                    zos.putNextEntry(new ZipEntry(pathFileName));
 
-		    zos.closeEntry();
-		    zos.flush();
-		} catch (IOException e) {
-		    result.include("mensagem", "Erro no download do zip");
-		    result.forwardTo(UsuarioController.class).viewGaleria(galeriaId);
-		    return null;
-		}
-	    }
-	    zos.finish();
-	    byte[] zip = baos.toByteArray();
+                    int bytesRead;
+                    while ((bytesRead = bis.read(buffer)) != -1) {
+                        zos.write(buffer, 0, bytesRead);
+                    }
 
-	    Download download = new ByteArrayDownload(zip, "application/zip", sessao.getUsuario().getNome() + ".zip");
-	    return download;
+                    zos.closeEntry();
+                    zos.flush();
+                } catch (IOException e) {
+                    result.include("mensagem", "Erro no download do zip");
+                    result.forwardTo(UsuarioController.class).viewGaleria(galeriaId);
+                    return null;
+                }
+            }
+            zos.finish();
+            byte[] zip = baos.toByteArray();
 
-	    //zipDownload = new ZipDownload(sessao.getUsuario().getNome() + ".zip", paths);
-	    //return zipDownloadBuilder.build();
-	} catch (IOException e) {
-	    result.include("mensagem", "Erro no download do zip");
-	    result.forwardTo(UsuarioController.class).viewGaleria(galeriaId);
-	    return null;
-	}
+            Download download = new ByteArrayDownload(zip, "application/zip", sessao.getUsuario().getNome() + ".zip");
+            return download;
+
+            //zipDownload = new ZipDownload(sessao.getUsuario().getNome() + ".zip", paths);
+            //return zipDownloadBuilder.build();
+        } catch (IOException e) {
+            result.include("mensagem", "Erro no download do zip");
+            result.forwardTo(UsuarioController.class).viewGaleria(galeriaId);
+            return null;
+        }
     }
 }
