@@ -2,9 +2,9 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.3.5
--- Dumped by pg_dump version 9.3.1
--- Started on 2015-09-25 01:10:22
+-- Dumped from database version 9.4.4
+-- Dumped by pg_dump version 9.4.4
+-- Started on 2015-10-02 02:48:47 BRT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -14,7 +14,7 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- TOC entry 176 (class 3079 OID 11750)
+-- TOC entry 178 (class 3079 OID 12808)
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
@@ -22,8 +22,8 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 1973 (class 0 OID 0)
--- Dependencies: 176
+-- TOC entry 2984 (class 0 OID 0)
+-- Dependencies: 178
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
@@ -37,7 +37,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 173 (class 1259 OID 82271)
+-- TOC entry 172 (class 1259 OID 24585)
 -- Name: galeria; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -49,10 +49,10 @@ CREATE TABLE galeria (
 );
 
 
-ALTER TABLE public.galeria OWNER TO postgres;
+ALTER TABLE galeria OWNER TO postgres;
 
 --
--- TOC entry 172 (class 1259 OID 82269)
+-- TOC entry 173 (class 1259 OID 24592)
 -- Name: galeria_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -64,11 +64,11 @@ CREATE SEQUENCE galeria_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.galeria_id_seq OWNER TO postgres;
+ALTER TABLE galeria_id_seq OWNER TO postgres;
 
 --
--- TOC entry 1974 (class 0 OID 0)
--- Dependencies: 172
+-- TOC entry 2985 (class 0 OID 0)
+-- Dependencies: 173
 -- Name: galeria_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -76,7 +76,7 @@ ALTER SEQUENCE galeria_id_seq OWNED BY galeria.id;
 
 
 --
--- TOC entry 175 (class 1259 OID 82289)
+-- TOC entry 174 (class 1259 OID 24594)
 -- Name: imagem; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -85,14 +85,15 @@ CREATE TABLE imagem (
     nome character varying NOT NULL,
     galeria integer NOT NULL,
     extensao character varying NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    descricao character varying
 );
 
 
-ALTER TABLE public.imagem OWNER TO postgres;
+ALTER TABLE imagem OWNER TO postgres;
 
 --
--- TOC entry 174 (class 1259 OID 82287)
+-- TOC entry 175 (class 1259 OID 24601)
 -- Name: imagem_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -104,11 +105,11 @@ CREATE SEQUENCE imagem_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.imagem_id_seq OWNER TO postgres;
+ALTER TABLE imagem_id_seq OWNER TO postgres;
 
 --
--- TOC entry 1975 (class 0 OID 0)
--- Dependencies: 174
+-- TOC entry 2986 (class 0 OID 0)
+-- Dependencies: 175
 -- Name: imagem_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -116,7 +117,7 @@ ALTER SEQUENCE imagem_id_seq OWNED BY imagem.id;
 
 
 --
--- TOC entry 171 (class 1259 OID 82206)
+-- TOC entry 176 (class 1259 OID 24603)
 -- Name: usuario; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -128,10 +129,10 @@ CREATE TABLE usuario (
 );
 
 
-ALTER TABLE public.usuario OWNER TO postgres;
+ALTER TABLE usuario OWNER TO postgres;
 
 --
--- TOC entry 170 (class 1259 OID 82204)
+-- TOC entry 177 (class 1259 OID 24609)
 -- Name: usuario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -143,11 +144,11 @@ CREATE SEQUENCE usuario_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.usuario_id_seq OWNER TO postgres;
+ALTER TABLE usuario_id_seq OWNER TO postgres;
 
 --
--- TOC entry 1976 (class 0 OID 0)
--- Dependencies: 170
+-- TOC entry 2987 (class 0 OID 0)
+-- Dependencies: 177
 -- Name: usuario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -155,7 +156,7 @@ ALTER SEQUENCE usuario_id_seq OWNED BY usuario.id;
 
 
 --
--- TOC entry 1839 (class 2604 OID 82274)
+-- TOC entry 2848 (class 2604 OID 24611)
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -163,7 +164,7 @@ ALTER TABLE ONLY galeria ALTER COLUMN id SET DEFAULT nextval('galeria_id_seq'::r
 
 
 --
--- TOC entry 1841 (class 2604 OID 82292)
+-- TOC entry 2850 (class 2604 OID 24612)
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -171,7 +172,7 @@ ALTER TABLE ONLY imagem ALTER COLUMN id SET DEFAULT nextval('imagem_id_seq'::reg
 
 
 --
--- TOC entry 1838 (class 2604 OID 82209)
+-- TOC entry 2851 (class 2604 OID 24613)
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -179,42 +180,42 @@ ALTER TABLE ONLY usuario ALTER COLUMN id SET DEFAULT nextval('usuario_id_seq'::r
 
 
 --
--- TOC entry 1963 (class 0 OID 82271)
--- Dependencies: 173
+-- TOC entry 2971 (class 0 OID 24585)
+-- Dependencies: 172
 -- Data for Name: galeria; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
 
 --
--- TOC entry 1977 (class 0 OID 0)
--- Dependencies: 172
+-- TOC entry 2988 (class 0 OID 0)
+-- Dependencies: 173
 -- Name: galeria_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('galeria_id_seq', 22, true);
+SELECT pg_catalog.setval('galeria_id_seq', 28, true);
 
 
 --
--- TOC entry 1965 (class 0 OID 82289)
--- Dependencies: 175
+-- TOC entry 2973 (class 0 OID 24594)
+-- Dependencies: 174
 -- Data for Name: imagem; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
 
 --
--- TOC entry 1978 (class 0 OID 0)
--- Dependencies: 174
+-- TOC entry 2989 (class 0 OID 0)
+-- Dependencies: 175
 -- Name: imagem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('imagem_id_seq', 34, true);
+SELECT pg_catalog.setval('imagem_id_seq', 45, true);
 
 
 --
--- TOC entry 1961 (class 0 OID 82206)
--- Dependencies: 171
+-- TOC entry 2975 (class 0 OID 24603)
+-- Dependencies: 176
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -223,8 +224,8 @@ INSERT INTO usuario (id, email, nome, senha) VALUES (2, 'hacker@hacker.com', 'H4
 
 
 --
--- TOC entry 1979 (class 0 OID 0)
--- Dependencies: 170
+-- TOC entry 2990 (class 0 OID 0)
+-- Dependencies: 177
 -- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -232,7 +233,7 @@ SELECT pg_catalog.setval('usuario_id_seq', 2, true);
 
 
 --
--- TOC entry 1848 (class 2606 OID 82279)
+-- TOC entry 2853 (class 2606 OID 24615)
 -- Name: galeria_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -241,7 +242,7 @@ ALTER TABLE ONLY galeria
 
 
 --
--- TOC entry 1850 (class 2606 OID 82297)
+-- TOC entry 2855 (class 2606 OID 24617)
 -- Name: imagem_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -250,7 +251,7 @@ ALTER TABLE ONLY imagem
 
 
 --
--- TOC entry 1844 (class 2606 OID 82268)
+-- TOC entry 2857 (class 2606 OID 24619)
 -- Name: usuario_email_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -259,7 +260,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 1846 (class 2606 OID 82266)
+-- TOC entry 2859 (class 2606 OID 24621)
 -- Name: usuario_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -268,7 +269,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 1851 (class 2606 OID 82282)
+-- TOC entry 2860 (class 2606 OID 24622)
 -- Name: galeria_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -277,7 +278,7 @@ ALTER TABLE ONLY galeria
 
 
 --
--- TOC entry 1852 (class 2606 OID 82368)
+-- TOC entry 2861 (class 2606 OID 24627)
 -- Name: imagem_galeria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -286,8 +287,8 @@ ALTER TABLE ONLY imagem
 
 
 --
--- TOC entry 1972 (class 0 OID 0)
--- Dependencies: 5
+-- TOC entry 2983 (class 0 OID 0)
+-- Dependencies: 6
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
 
@@ -297,7 +298,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2015-09-25 01:10:23
+-- Completed on 2015-10-02 02:48:48 BRT
 
 --
 -- PostgreSQL database dump complete
