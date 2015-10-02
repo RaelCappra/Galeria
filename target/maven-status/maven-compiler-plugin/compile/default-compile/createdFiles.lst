@@ -1,0 +1,14 @@
+interceptadores/Log.class
+model/Usuario.class
+persistencia/Conexao.class
+persistencia/GaleriaDao.class
+controller/IndexController.class
+controller/GaleriaController.class
+model/Imagem.class
+model/Galeria.class
+persistencia/ConexaoPostgreSQL.class
+persistencia/UsuarioDao.class
+controller/UsuarioController.class
+persistencia/ImagemDao.class
+sessao/UsuarioSessao.class
+persistencia/Dao.class

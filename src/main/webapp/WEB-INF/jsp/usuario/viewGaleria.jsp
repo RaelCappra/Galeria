@@ -54,9 +54,10 @@
                 <c:forEach items="${imagemList}" var="imagem">
 
                     <div class="slick-slide">
-                        <form action="${linkTo[GaleriaController].editImagem}" id="edit${imagem.id}" method="post">
+                        <form class="form-group-sm" action="${linkTo[GaleriaController].editImagem}" id="edit${imagem.id}" method="post">
                             <span>
-                                <input type="text" name="imagem.nome" value="${imagem.nome}">
+                                <input class="form-control-static" type="text" name="imagem.nome" value="${imagem.nome}"><br>
+                                <input class="form-control-static" type="text" name="imagem.descricao" value="${imagem.descricao}">
                             </span>
                             <span>
                                 <button type="submit" form="edit${imagem.id}">
@@ -80,9 +81,10 @@
                 </c:forEach>
             </div>
 
-            <form action="${pageContext.request.contextPath}/galeria/addImagem" enctype="multipart/form-data" method="post">
+            <form class="form-group" action="${pageContext.request.contextPath}/galeria/addImagem" enctype="multipart/form-data" method="post">
                 Imagem: <input type="file" name="file" accept="image/jpeg, image/png, image/bmp, image/gif" required/><br>
-                <label for="nome">Nome</label> <input type="text" id="nome" name="imagem.nome" required><br>
+                <label for="nome">Nome</label> <input class="form-control-static" type="text" id="nome" name="imagem.nome" required><br>
+                <label for="descricao">Descrição</label> <input class="form-control-static" type="text" id="descricao" name="imagem.descricao"><br>
                 <input type="hidden" value="${galeria.id}" name="galeriaId"/>
                 <input type="submit"/>
             </form><br>

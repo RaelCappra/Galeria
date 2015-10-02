@@ -42,6 +42,14 @@ public class Imagem {
 	this.galeria = galeria;
     }
 
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     public long getId() {
 	return id;
     }

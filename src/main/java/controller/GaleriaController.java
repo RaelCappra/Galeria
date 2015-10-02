@@ -119,7 +119,7 @@ public class GaleriaController {
 	    return;
 	}
 	
-	imagemDao.edit(imagem.getId(), imagem.getNome());
+	imagemDao.edit(imagem.getId(), imagem.getNome(), imagem.getDescricao());
 	result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
     }
     
