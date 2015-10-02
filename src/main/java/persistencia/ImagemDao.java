@@ -29,7 +29,7 @@ public class ImagemDao implements Dao<Imagem, Long> {
 
     @Override
     public void save(Imagem entity) {
-	String query = "insert into " + TABELA + " (nome, galeria, extensao) values (?, ?, ?)";
+	String query = "insert into " + TABELA + " (nome, galeria, extensao, descricao) values (?, ?, ?, ?)";
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
 		conexao = new ConexaoPostgreSQL("localhost", "postgres", "postgres", DATABASE);
@@ -38,6 +38,7 @@ public class ImagemDao implements Dao<Imagem, Long> {
 		PreparedStatement ps = connection.prepareStatement(query)) {
 		ps.setString(2, entity.getNome());
 		ps.setLong(3, entity.getGaleria().getId());
+		ps.setString(4, entity.getDescricao());
 		ps.execute();
 	    } catch (SQLException e) {
 		//TODO: ERRO: nao foi adicionada o usuario
@@ -49,7 +50,7 @@ public class ImagemDao implements Dao<Imagem, Long> {
     }
 
     public Long saveReturningId(Imagem entity) {
-	String query = "insert into " + TABELA + " (nome, galeria, extensao) values (?, ?, ?) returning id";
+	String query = "insert into " + TABELA + " (nome, galeria, extensao, descricao) values (?, ?, ?, ?) returning id";
 	Long id = null;
 	try {
 	    if (conexao == null || conexao.getConnection().isClosed()) {
@@ -59,6 +60,7 @@ public class ImagemDao implements Dao<Imagem, Long> {
 		PreparedStatement ps = connection.prepareStatement(query)) {
 		ps.setString(1, entity.getNome());
 		ps.setString(3, entity.getExtensao());
+		ps.setString(4, entity.getDescricao());
 		ps.setLong(2, entity.getGaleria().getId());
 		ResultSet rs = ps.executeQuery();
 
@@ -138,11 +140,14 @@ public class ImagemDao implements Dao<Imagem, Long> {
 		    Imagem imagem = new Imagem();
 		    long id = rs.getLong("id");
 		    String nome = rs.getString("nome");
+		    String descricao = rs.getString("descricao");
 		    long idGaleria = rs.getLong("galeria");
+                    
 		    Galeria galeria = new GaleriaDao().getById(idGaleria);
 		    imagem.setId(id);
 		    imagem.setNome(nome);
 		    imagem.setGaleria(galeria);
+		    imagem.setDescricao(descricao);
 
 		    result.add(imagem);
 		}
@@ -183,12 +188,15 @@ public class ImagemDao implements Dao<Imagem, Long> {
 		    long id = pk;
 		    String nome = rs.getString("nome");
 		    String extensao = rs.getString("extensao");
+		    String descricao = rs.getString("descricao");
 		    long idGaleria = rs.getLong("galeria");
+                    
 		    Galeria galeria = new GaleriaDao().getById(idGaleria);
 		    result.setId(id);
 		    result.setNome(nome);
 		    result.setExtensao(extensao);
 		    result.setGaleria(galeria);
+		    result.setDescricao(descricao);
 
 		} else {
 		    //TODO: ERRO: ---
@@ -202,17 +210,17 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	return result;
     }
 
-    public void edit(long id, String nome) {
-	edit(id, nome, false);
+    public void edit(long id, String nome, String descricao) {
+	edit(id, nome, descricao, false);
     }
 
-    public void edit(long id, String nome, boolean affectDeleted) {
+    public void edit(long id, String nome, String descricao, boolean affectDeleted) {
 
 	String query;
 	if (affectDeleted) {
-	    query = "update " + TABELA + " set nome = ? where id = ?";
+	    query = "update " + TABELA + " set nome = ?, descricao = ? where id = ?";
 	} else {
-	    query = "update " + TABELA + " set nome = ? where id = ? and deleted = false";
+	    query = "update " + TABELA + " set nome = ?, descricao = ? where id = ? and deleted = false";
 	}
 
 	try {
@@ -221,7 +229,8 @@ public class ImagemDao implements Dao<Imagem, Long> {
 	    }
 	    try (Connection connection = conexao.getConnection();
 		PreparedStatement ps = connection.prepareStatement(query)) {
-		ps.setLong(2, id);
+		ps.setLong(3, id);
+		ps.setString(2, descricao);
 		ps.setString(1, nome);
 		ps.execute();
 	    } catch (SQLException e) {
@@ -257,10 +266,13 @@ public class ImagemDao implements Dao<Imagem, Long> {
 		    long id = rs.getLong("id");
 		    String nome = rs.getString("nome");
 		    String extensao = rs.getString("extensao");
+		    String descricao = rs.getString("descricao");                    
+                    
 		    imagem.setId(id);
 		    imagem.setNome(nome);
 		    imagem.setExtensao(extensao);
 		    imagem.setGaleria(galeria);
+		    imagem.setDescricao(descricao);
 
 		    result.add(imagem);
 
