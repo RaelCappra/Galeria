@@ -12,17 +12,18 @@ package model;
 public class Imagem {
 
     private long id;
-    private String nome, extensao;
+    private String nome, extensao, descricao;
     private Galeria galeria;
 
     public Imagem() {
     }
 
-    public Imagem(long id, String nome, Galeria galeria, String extensao) {
+    public Imagem(long id, String nome, Galeria galeria, String extensao, String descricao) {
 	this.id = id;
 	this.nome = nome;
 	this.galeria = galeria;
 	this.extensao = extensao;
+        this.descricao = descricao;
     }
 
     public String getExtensao() {
