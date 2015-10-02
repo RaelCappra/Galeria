@@ -5,15 +5,21 @@
  */
 package model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  *
  * @author Rael
  */
 public class Imagem {
-
+    
+    @NotNull
     private long id;
-    private String nome, extensao, descricao;
-    private Galeria galeria;
+    
+    private @NotNull @Size(min = 3) String nome;
+    private String descricao, extensao;
+    private @NotNull Galeria galeria;
 
     public Imagem() {
     }

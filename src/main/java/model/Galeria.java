@@ -6,6 +6,8 @@
 package model;
 
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import persistencia.ImagemDao;
 
 /**
@@ -13,9 +15,9 @@ import persistencia.ImagemDao;
  * @author Rael
  */
 public class Galeria {
-    private long id;
-    private Usuario usuario;
-    private String nome;
+    private @NotNull long id;
+    private @NotNull Usuario usuario;
+    private @NotNull @Size(min=3) String nome;
 
     public long getId() {
         return id;
