@@ -17,7 +17,7 @@ import persistencia.ImagemDao;
 public class Galeria {
     private @NotNull long id;
     private @NotNull Usuario usuario;
-    private @NotNull @Size(min=3) String nome;
+    private @NotNull @Size(min=3, message="O nome da galeria deve ser maior que {min}") String nome;
 
     public long getId() {
         return id;
