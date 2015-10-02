@@ -33,7 +33,7 @@
             .slick-next {
                 margin-right: 40px;
             }*/
-            
+
             .slick-slide{
                 margin-left: 2%;
                 //margin-right: 5%;
@@ -44,9 +44,12 @@
     </head>
     <body>
         <div class="content container">
-            <h1 class="error">
-                ${mensagem}
-            </h1>
+            <c:forEach var="error" items="${errors}">
+                <h1 class="error">
+                    ${error.message}<br>
+                </h1>
+            </c:forEach>
+
             <h1>${galeria.nome}</h1>
             <hr/>
 
@@ -56,8 +59,8 @@
                     <div class="slick-slide">
                         <form class="form-group-sm" action="${linkTo[GaleriaController].editImagem}" id="edit${imagem.id}" method="post">
                             <span>
-                                <input class="form-control-static" type="text" name="imagem.nome" value="${imagem.nome}"><br>
-                                <input class="form-control-static" type="text" name="imagem.descricao" value="${imagem.descricao}">
+                                Nome: <input class="form-control-static" type="text" name="imagem.nome" value="${imagem.nome}"><br>
+                                Descrição: <input class="form-control-static" type="text" name="imagem.descricao" value="${imagem.descricao}">
                             </span>
                             <span>
                                 <button type="submit" form="edit${imagem.id}">

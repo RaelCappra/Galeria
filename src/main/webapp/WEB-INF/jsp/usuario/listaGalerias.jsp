@@ -15,9 +15,11 @@
     </head>
     <body>
         <div class="content container">
-            <%--<h1 class="error">
-                ${mensagem}
-            </h1>--%>
+            <c:forEach var="error" items="${errors}">
+                <h1 class="error">
+                    ${error.message}<br>
+                </h1>
+            </c:forEach>
             <h1>Galerias de ${nome}</h1>
             <hr/>
 

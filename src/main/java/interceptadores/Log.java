@@ -1,4 +1,4 @@
-package interceptadores;
+    package interceptadores;
 
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AfterCall;

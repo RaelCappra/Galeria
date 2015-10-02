@@ -11,6 +11,8 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.observer.download.ByteArrayDownload;
 import br.com.caelum.vraptor.observer.download.Download;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
+import br.com.caelum.vraptor.validator.SimpleMessage;
+import br.com.caelum.vraptor.validator.Validator;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -26,7 +28,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import model.Galeria;
 import model.Imagem;
 import org.apache.commons.io.IOUtils;
@@ -48,6 +50,9 @@ public class GaleriaController {
      this.servletContext = servletContext;
      }
      */
+    
+    @Inject
+    private Validator validator;
 
     @Inject
     private ServletContext servletContext;
@@ -73,7 +78,7 @@ public class GaleriaController {
 
     static final String UPLOAD_DIR = "uploads";
 
-    public void addImagem(Imagem imagem, long galeriaId, UploadedFile file) throws FileNotFoundException, IOException {
+    public void addImagem(@Valid Imagem imagem, long galeriaId, UploadedFile file) throws FileNotFoundException, IOException {
 	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
 	    result.redirectTo(UsuarioController.class).listaGalerias();
 	} else {
@@ -84,7 +89,7 @@ public class GaleriaController {
 
 		if (!ACCEPTED_TYPES.contains(tipo)) {
 		    result.include("mensagem", "Erro: tipo ilegal de imagem");
-		    result.forwardTo(UsuarioController.class).viewGaleria(galeriaId);
+		    result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
 		} else {
 		    String extensao = tipo.split("/")[1];
 		    imagem.setExtensao(extensao);
@@ -110,9 +115,10 @@ public class GaleriaController {
 	}
     }
 
-    public void editImagem(Imagem imagem) {
+    public void editImagem(@Valid Imagem imagem) {
+        
 	long galeriaId = imagemDao.getById(imagem.getId()).getGaleria().getId();
-	
+	validator.onErrorRedirectTo(UsuarioController.class).viewGaleria(galeriaId);
 	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
 	    result.include("mensagem", "Acesso Negado");
 	    result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
@@ -140,20 +146,14 @@ public class GaleriaController {
 
     @br.com.caelum.vraptor.Path("galeria/zipGaleria/{galeriaId}")
     public Download zipGaleria(long galeriaId) {
-	if (!sessao.getIdsPermitidosDeGalerias().contains(galeriaId)) {
-	    result.include("mensagem", "Acesso Negado");
-	    result.redirectTo(UsuarioController.class).viewGaleria(galeriaId);
-	    return null;
-	}
+        validator.ensure(sessao.getIdsPermitidosDeGalerias().contains(galeriaId), new SimpleMessage("galeria", "Acesso negado"));
 	Galeria galeria = new Galeria();
 	galeria.setId(galeriaId);
 	List<Imagem> imagens = imagemDao.listByGaleria(galeria);
-	if (imagens == null || imagens.isEmpty()) {
-	    result.include("mensagem", "Galeria vazia");
-	    result.forwardTo(UsuarioController.class).viewGaleria(galeriaId);
-	    return null;
-	}
-
+        
+        validator.addIf(imagens == null || imagens.isEmpty(), new SimpleMessage("galeria", "Galeria vazia"));
+        validator.onErrorRedirectTo(UsuarioController.class).viewGaleria(galeriaId);
+        
 	List<Path> paths = new ArrayList<>();
 	for (Imagem imagem : imagens) {
 	    String realPath = servletContext.getRealPath("/");
