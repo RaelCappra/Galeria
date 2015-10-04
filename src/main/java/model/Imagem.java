@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
  */
 public class Imagem {
     
-    @NotNull
     private long id;
     
     private @NotNull @Size(min = 3, message = "O nome da imagem deve ser maior que {min}") String nome;
